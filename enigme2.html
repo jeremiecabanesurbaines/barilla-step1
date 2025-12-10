@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERMINAL DE SÉCURITÉ</title>
+    <style>
+        /* DESIGN TYPE HACKER / ESCAPE GAME */
+        body {
+            background-color: #000;
+            color: #33ff00; /* Vert fluo */
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify_content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 { text-transform: uppercase; border-bottom: 2px solid #33ff00; padding-bottom: 10px; }
+        .container { text-align: center; max-width: 600px; width: 100%; }
+        input {
+            background: #111; border: 1px solid #33ff00; color: #33ff00;
+            padding: 15px; font-size: 18px; width: 70%; text-align: center;
+            margin-bottom: 20px; outline: none;
+        }
+        button {
+            background: #33ff00; color: #000; border: none;
+            padding: 15px 30px; font-size: 18px; font-weight: bold;
+            cursor: pointer; text-transform: uppercase;
+        }
+        button:hover { background: #fff; }
+        
+        /* ZONES CACHÉES */
+        #message-erreur { color: red; display: none; margin-top: 20px; font-weight: bold; }
+        #contenu-secret { display: none; border: 1px dashed #33ff00; padding: 20px; margin-top: 30px; }
+        img { max-width: 100%; height: auto; border: 1px solid #33ff00; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🔒 ACCÈS RESTREINT</h1>
+        <p>Veuillez saisir le code d'accréditation :</p>
+
+        <input type="text" id="codeSaisi" placeholder="_ _ _ _">
+        <br>
+        <button onclick="verifierCode()">VALIDER L'ACCÈS</button>
+
+        <div id="message-erreur">
+            ⛔ ERREUR SYSTÈME : Code invalide.<br>
+            Tentative non autorisée enregistrée.
+        </div>
+
+        <div id="contenu-secret">
+            <h2>✅ ACCÈS AUTORISÉ</h2>
+            <p>Félicitations Agent. Voici votre prochain indice :</p>
+            
+            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b" alt="Indice">
+            
+            <p>Rendez-vous au point de coordonnées : <strong>48.8566° N</strong></p>
+        </div>
+    </div>
+
+    <script>
+        function verifierCode() {
+            // --- CONFIGURATION DU MOT DE PASSE ---
+            var leBonMotDePasse = "EKILIBRE"; // CHANGEZ LE MOT DE PASSE ICI (gardez les guillemets)
+            // -------------------------------------
+
+            var saisieUtilisateur = document.getElementById("codeSaisi").value;
+            
+            // On transforme tout en majuscules pour éviter les erreurs si le joueur tape "delta"
+            if (saisieUtilisateur.toUpperCase() === leBonMotDePasse) {
+                document.getElementById("contenu-secret").style.display = "block";
+                document.getElementById("message-erreur").style.display = "none";
+                // On cache le champ de saisie pour faire propre
+                document.getElementById("codeSaisi").style.display = "none";
+            } else {
+                document.getElementById("message-erreur").style.display = "block";
+                document.getElementById("contenu-secret").style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>
