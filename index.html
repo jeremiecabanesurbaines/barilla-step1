@@ -3,85 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERMINAL DE SÉCURITÉ</title>
+    <title>Énigme B_together</title>
     <style>
-        /* DESIGN TYPE HACKER / ESCAPE GAME */
+        /* --- DESIGN PERSONNALISÉ --- */
         body {
-            background-color: #000;
-            color: #33ff00; /* Vert fluo */
-            font-family: 'Courier New', Courier, monospace;
+            background-color: #213973; /* Votre Bleu spécifique */
+            color: white; /* Texte en blanc pour le contraste */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify_content: center;
-            height: 100vh;
+            justify-content: center;
+            min-height: 100vh;
             margin: 0;
             padding: 20px;
+            text-align: center;
         }
-        h1 { text-transform: uppercase; border-bottom: 2px solid #33ff00; padding-bottom: 10px; }
-        .container { text-align: center; max-width: 600px; width: 100%; }
+
+        /* Style du Logo */
+        .logo-img {
+            max-width: 80%; /* S'adapte aux mobiles */
+            width: 400px;   /* Taille max sur ordi */
+            height: auto;
+            margin-bottom: 30px;
+        }
+
+        /* Conteneur principal */
+        .container {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: normal;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Champ de réponse */
         input {
-            background: #111; border: 1px solid #33ff00; color: #33ff00;
-            padding: 15px; font-size: 18px; width: 70%; text-align: center;
-            margin-bottom: 20px; outline: none;
+            background: transparent;
+            border: 1px solid white; /* Le liseré blanc fin demandé */
+            color: white;
+            padding: 15px;
+            font-size: 18px;
+            width: 60%;
+            text-align: center;
+            margin-bottom: 20px;
+            outline: none;
+            border-radius: 5px;
         }
-        button {
-            background: #33ff00; color: #000; border: none;
-            padding: 15px 30px; font-size: 18px; font-weight: bold;
-            cursor: pointer; text-transform: uppercase;
-        }
-        button:hover { background: #fff; }
         
-        /* ZONES CACHÉES */
-        #message-erreur { color: red; display: none; margin-top: 20px; font-weight: bold; }
-        #contenu-secret { display: none; border: 1px dashed #33ff00; padding: 20px; margin-top: 30px; }
-        img { max-width: 100%; height: auto; border: 1px solid #33ff00; margin-top: 10px; }
+        /* Changer la couleur du texte indicatif (placeholder) en gris clair */
+        ::placeholder { color: #ccc; opacity: 0.7; }
+
+        /* Bouton */
+        button {
+            background: white;
+            color: #213973;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        button:hover { background: #e0e0e0; }
+        
+        /* Zones cachées (Message d'erreur et Succès) */
+        #message-erreur { 
+            color: #ff9999; /* Rouge clair pour être lisible sur le bleu */
+            display: none; 
+            margin-top: 20px; 
+            font-weight: bold; 
+        }
+        
+        #contenu-secret { 
+            display: none; 
+            border: 1px solid white; 
+            padding: 30px; 
+            margin-top: 30px; 
+            background-color: rgba(255, 255, 255, 0.1); /* Fond très légèrement blanc transparent */
+            border-radius: 8px;
+        }
+
+        .indice-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>🔒 CLÉ DU SUCCÈS</h1>
-        <p>Veuillez saisir le code d'accréditation :</p>
+    <img src="B_together26-WEST-EU_logo_landscape_Blue-Background.png" alt="Logo B_together" class="logo-img">
 
-        <input type="text" id="codeSaisi" placeholder="_ _ _ _">
+    <div class="container">
+        <p style="font-size: 1.2em; line-height: 1.6;">
+            <strong>Énigme ></strong> Si ce n’est pas le lendemain de lundi ou le jour avant jeudi, que demain n’est pas dimanche, que ce n’était pas dimanche hier et que le jour après demain n’est pas samedi, et que le jour avant hier n’était pas mercredi, quel jour sommes-nous ?
+        </p>
+
+        <input type="text" id="codeSaisi" placeholder="Votre réponse ici...">
         <br>
-        <button onclick="verifierCode()">VALIDER L'ACCÈS</button>
+        <button onclick="verifierCode()">VALIDER</button>
 
         <div id="message-erreur">
-            ⛔ ERREUR SYSTÈME : Code invalide.<br>
-            Tentative non autorisée enregistrée.
+            Mauvaise réponse. Essayez encore !
         </div>
 
         <div id="contenu-secret">
-            <h2>✅ ACCÈS AUTORISÉ</h2>
-            <p>Félicitations Agent. Voici votre prochain indice :</p>
-            
-            <img src="indicel.png" alt="Indice">
-            
-            <p>Rendez-vous au point de coordonnées : <strong>48.8566° N</strong></p>
+            <h2>Félicitations !</h2>
+            <p class="indice-text">
+                Voici votre indice :<br><br>
+                A l’entrée de l’ancien marché aux poissons, aujourd’hui temple de la culture rochelaise.
+            </p>
         </div>
     </div>
 
     <script>
         function verifierCode() {
-            // --- CONFIGURATION DU MOT DE PASSE ---
-            var leBonMotDePasse = "DELTA"; // CHANGEZ LE MOT DE PASSE ICI (gardez les guillemets)
-            // -------------------------------------
+            // --- LA BONNE RÉPONSE ---
+            var reponseCorrecte = "DIMANCHE"; 
+            // ------------------------
 
-            var saisieUtilisateur = document.getElementById("codeSaisi").value;
-            
-            // On transforme tout en majuscules pour éviter les erreurs si le joueur tape "delta"
-            if (saisieUtilisateur.toUpperCase() === leBonMotDePasse) {
+            var champSaisie = document.getElementById("codeSaisi");
+            var saisieUtilisateur = champSaisie.value;
+
+            // .trim() enlève les espaces accidentels avant ou après
+            // .toUpperCase() transforme tout en majuscules pour comparer
+            if (saisieUtilisateur.trim().toUpperCase() === reponseCorrecte) {
+                
+                // Affiche le succès
                 document.getElementById("contenu-secret").style.display = "block";
                 document.getElementById("message-erreur").style.display = "none";
-                // On cache le champ de saisie pour faire propre
-                document.getElementById("codeSaisi").style.display = "none";
+                
+                // Cache le bouton et le champ pour faire propre
+                champSaisie.style.display = "none";
+                document.querySelector("button").style.display = "none";
+                
             } else {
+                // Affiche l'erreur
                 document.getElementById("message-erreur").style.display = "block";
                 document.getElementById("contenu-secret").style.display = "none";
             }
         }
+        
+        // Permet de valider aussi en appuyant sur la touche "Entrée" du clavier
+        document.getElementById("codeSaisi").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                verifierCode();
+            }
+        });
     </script>
 
 </body>
