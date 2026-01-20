@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Énigme B_together</title>
+    <title>Accès Sécurisé B_together</title>
     <style>
         /* --- DESIGN GLOBAL --- */
         body {
@@ -34,19 +34,31 @@
 
         /* --- STYLES SPÉCIFIQUES --- */
         
-        .rouge-marque {
-            color: #b31832;
-            font-weight: bold;
+        /* Zone de Login (Visible au début) */
+        #zone-login {
+            display: block;
+            border: 2px solid white;
+            padding: 30px;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.2);
         }
 
-        /* Compteur de tentatives */
+        /* Zone Enigme (Cachée au début) */
+        #zone-enigme {
+            display: none;
+        }
+
+        .rouge-marque { color: #b31832; font-weight: bold; }
+
+        /* Compteur */
         #compteur-affichage {
             margin-top: 20px;
             font-weight: bold;
             font-size: 16px;
-            color: #ccc; /* Gris clair */
+            color: #ccc;
         }
 
+        /* Champs de saisie (Login et Réponse) */
         input {
             background: transparent;
             border: 1px solid white;
@@ -60,14 +72,8 @@
             border-radius: 5px;
             margin-top: 10px;
         }
+        input:disabled { border-color: #555; color: #555; cursor: not-allowed; }
         ::placeholder { color: #ccc; opacity: 0.7; }
-
-        /* Style quand le champ est désactivé (bloqué) */
-        input:disabled {
-            border-color: #555;
-            color: #555;
-            cursor: not-allowed;
-        }
 
         button {
             background: white;
@@ -81,24 +87,17 @@
             transition: 0.3s;
         }
         button:hover { background: #e0e0e0; }
-
-        /* Style du bouton quand il est désactivé (bloqué) */
-        button:disabled {
-            background: #555;
-            color: #888;
-            cursor: not-allowed;
-        }
+        button:disabled { background: #555; color: #888; cursor: not-allowed; }
         
         #message-erreur { 
-            color: #ff9999; 
-            display: none; 
-            margin-top: 20px; 
-            font-weight: bold; 
+            color: #ff9999; display: none; margin-top: 20px; font-weight: bold; 
+        }
+        #message-login-erreur {
+            color: #ff9999; display: none; margin-top: 10px; font-weight: bold; 
         }
 
-        /* Message spécifique pour le blocage définitif */
         #message-bloque {
-            color: #b31832; /* Rouge demandé */
+            color: #b31832;
             font-size: 20px;
             font-weight: bold;
             display: none;
@@ -106,6 +105,7 @@
             text-transform: uppercase;
             border: 2px solid #b31832;
             padding: 10px;
+            background: rgba(0,0,0,0.3);
         }
         
         #contenu-secret { 
@@ -117,27 +117,9 @@
             border-radius: 8px;
         }
 
-        .titre-succes {
-            color: #b31832;
-            text-transform: uppercase;
-            margin-top: 0;
-        }
-
-        .indice-text {
-            font-size: 20px;
-            font-weight: bold;
-            color: #fff;
-            line-height: 1.5;
-        }
-
-        .petit-texte {
-            font-size: 14px;
-            font-weight: normal;
-            font-style: italic;
-            opacity: 0.8;
-            display: block;
-            margin-top: 15px;
-        }
+        .titre-succes { color: #b31832; text-transform: uppercase; margin-top: 0; }
+        .indice-text { font-size: 20px; font-weight: bold; color: #fff; line-height: 1.5; }
+        .petit-texte { font-size: 14px; font-weight: normal; font-style: italic; opacity: 0.8; display: block; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -145,100 +127,182 @@
     <img src="B_together26-WEST-EU_logo_landscape_Blue-Background.png" alt="Logo B_together" class="logo-img">
 
     <div class="container">
-        
-        <p style="font-size: 1.2em; line-height: 1.6;">
-            <span class="rouge-marque" style="font-size: 1.4em;">ÉNIGME :</span>
-            <br><br>
-            Si ce n’est pas le lendemain de lundi ou le jour avant jeudi, que demain n’est pas dimanche, que ce n’était pas dimanche hier et que le jour après demain n’est pas samedi, et que le jour avant hier n’était pas mercredi, quel jour sommes-nous ?
-        </p>
 
-        <div id="compteur-affichage">Tentative : 0 sur 3</div>
-
-        <input type="text" id="codeSaisi" placeholder="Votre réponse ici...">
-        <br>
-        <button id="boutonValider" onclick="verifierCode()">VALIDER</button>
-
-        <div id="message-erreur">
-            Mauvaise réponse. Essayez encore !
+        <div id="zone-login">
+            <h2 style="text-transform: uppercase;">Identification Requise</h2>
+            <p>Veuillez entrer votre Code Équipe pour accéder à l'énigme.</p>
+            <input type="text" id="codeEquipe" placeholder="Code Équipe (ex: TEAM1)">
+            <br>
+            <button onclick="connexionEquipe()">ACCÉDER</button>
+            <div id="message-login-erreur">Code Équipe inconnu.</div>
         </div>
 
-        <div id="message-bloque">
-            ⛔ SYSTÈME VERROUILLÉ<br>Trop de tentatives échouées.
-        </div>
-
-        <div id="contenu-secret">
-            <h2 class="titre-succes">FÉLICITATION</h2>
-            <p class="indice-text">
-                Voici votre indice :<br><br>
-                A l’entrée de l’ancien marché aux poissons, aujourd’hui temple de la culture rochelaise,
-                <span class="petit-texte">
-                    Reportez cet indice sur votre roadbook, il vous sera utile.
-                </span>
+        <div id="zone-enigme">
+            <p style="font-size: 1.2em; line-height: 1.6;">
+                <span class="rouge-marque" style="font-size: 1.4em;">ÉNIGME :</span>
+                <br><br>
+                Si ce n’est pas le lendemain de lundi ou le jour avant jeudi, que demain n’est pas dimanche, que ce n’était pas dimanche hier et que le jour après demain n’est pas samedi, et que le jour avant hier n’était pas mercredi, quel jour sommes-nous ?
             </p>
+
+            <div id="compteur-affichage">Tentative : 0 sur 3</div>
+
+            <input type="text" id="codeSaisi" placeholder="Votre réponse ici...">
+            <br>
+            <button id="boutonValider" onclick="verifierReponse()">VALIDER</button>
+
+            <div id="message-erreur">Mauvaise réponse. Essayez encore !</div>
+
+            <div id="message-bloque">
+                ⛔ SYSTÈME VERROUILLÉ<br>Vous avez épuisé vos 3 tentatives pour ce code équipe.
+            </div>
+
+            <div id="contenu-secret">
+                <h2 class="titre-succes">FÉLICITATION</h2>
+                <p class="indice-text">
+                    Voici votre indice :<br><br>
+                    A l’entrée de l’ancien marché aux poissons, aujourd’hui temple de la culture rochelaise,
+                    <span class="petit-texte">
+                        Reportez cet indice sur votre roadbook, il vous sera utile.
+                    </span>
+                </p>
+            </div>
         </div>
     </div>
 
     <script>
-        // --- CONFIGURATION ---
-        var tentativesActuelles = 0;
+        // --- CONFIGURATION ADMIN ---
+        
+        // Liste des codes autorisés pour les joueurs (en majuscules)
+        // Vous pouvez en ajouter autant que vous voulez : "CODE3", "CODE4", etc.
+        var codesEquipesAutorises = ["TEAM1", "TEAM2", "TEAM3", "TEST", "ALPHA"]; 
+        
+        var reponseEnigme = "DIMANCHE"; 
         var tentativesMax = 3;
-        var reponseCorrecte = "DIMANCHE"; 
-        // ---------------------
 
-        function verifierCode() {
+        // ---------------------------
+        
+        var currentTeam = ""; // Variable pour stocker quelle équipe joue
+        
+        // Fonction 1 : Gérer la connexion
+        function connexionEquipe() {
+            var inputEquipe = document.getElementById("codeEquipe").value.trim().toUpperCase();
+            
+            // Vérifier si le code existe dans la liste
+            if (codesEquipesAutorises.includes(inputEquipe)) {
+                currentTeam = inputEquipe;
+                
+                // On cache le login et on montre l'énigme
+                document.getElementById("zone-login").style.display = "none";
+                document.getElementById("zone-enigme").style.display = "block";
+                
+                // On charge les données sauvegardées pour cette équipe
+                chargerDonneesEquipe();
+            } else {
+                document.getElementById("message-login-erreur").style.display = "block";
+            }
+        }
+
+        // Fonction 2 : Vérifier la réponse à l'énigme
+        function verifierReponse() {
             var champSaisie = document.getElementById("codeSaisi");
             var bouton = document.getElementById("boutonValider");
             var saisieUtilisateur = champSaisie.value;
 
-            // Si le champ est vide, on ne compte pas de tentative (optionnel)
             if (saisieUtilisateur.trim() === "") return;
 
-            // 1. On incrémente le compteur
-            tentativesActuelles++;
+            // On récupère les données actuelles
+            var donnees = getDonneesLocales();
             
-            // 2. Mise à jour de l'affichage du compteur
-            document.getElementById("compteur-affichage").innerText = "Tentative : " + tentativesActuelles + " sur " + tentativesMax;
+            // On incrémente
+            donnees.tentatives++;
+            sauvegarderDonnees(donnees); // On sauvegarde tout de suite !
 
-            // 3. Vérification de la réponse
-            if (saisieUtilisateur.trim().toUpperCase() === reponseCorrecte) {
+            // Mise à jour affichage
+            updateUI(donnees);
+
+            // Vérification
+            if (saisieUtilisateur.trim().toUpperCase() === reponseEnigme) {
                 // VICTOIRE
-                document.getElementById("contenu-secret").style.display = "block";
-                document.getElementById("message-erreur").style.display = "none";
-                document.getElementById("message-bloque").style.display = "none";
-                document.getElementById("compteur-affichage").style.display = "none";
-                
-                champSaisie.style.display = "none";
-                bouton.style.display = "none";
-
+                donnees.gagne = true;
+                sauvegarderDonnees(donnees);
+                afficherVictoire();
             } else {
-                // ÉCHEC
-                if (tentativesActuelles >= tentativesMax) {
-                    // CAS : TROP D'ERREURS -> BLOCAGE
-                    document.getElementById("message-erreur").style.display = "none";
-                    document.getElementById("message-bloque").style.display = "block";
-                    
-                    // On désactive les contrôles
-                    champSaisie.disabled = true;
-                    bouton.disabled = true;
-                    bouton.innerText = "BLOQUÉ";
-                    champSaisie.value = "ACCÈS REFUSÉ";
+                // ECHEC
+                if (donnees.tentatives >= tentativesMax) {
+                    donnees.bloque = true;
+                    sauvegarderDonnees(donnees);
+                    bloquerJeu();
                 } else {
-                    // CAS : MAUVAISE RÉPONSE MAIS ENCORE DES ESSAIS
                     document.getElementById("message-erreur").style.display = "block";
-                    // Petit effet : on vide le champ pour qu'ils retentent
                     champSaisie.value = "";
                     champSaisie.focus();
                 }
             }
         }
-        
-        // Touche Entrée (ne fonctionne que si le bouton n'est pas désactivé)
-        document.getElementById("codeSaisi").addEventListener("keypress", function(event) {
-            var bouton = document.getElementById("boutonValider");
-            if (event.key === "Enter" && !bouton.disabled) {
-                verifierCode();
+
+        // --- FONCTIONS TECHNIQUES (Stockage & Affichage) ---
+
+        // Récupérer les données de l'équipe dans la mémoire du navigateur
+        function getDonneesLocales() {
+            var saveKey = "escape_game_" + currentTeam;
+            var data = localStorage.getItem(saveKey);
+            
+            if (data) {
+                return JSON.parse(data);
+            } else {
+                // Si aucune donnée, on initialise
+                return { tentatives: 0, bloque: false, gagne: false };
             }
+        }
+
+        // Sauvegarder les données
+        function sauvegarderDonnees(data) {
+            var saveKey = "escape_game_" + currentTeam;
+            localStorage.setItem(saveKey, JSON.stringify(data));
+        }
+
+        // Mettre à jour l'écran quand on charge ou quand on joue
+        function chargerDonneesEquipe() {
+            var donnees = getDonneesLocales();
+            updateUI(donnees);
+
+            if (donnees.gagne) {
+                afficherVictoire();
+            } else if (donnees.tentatives >= tentativesMax) {
+                bloquerJeu();
+            }
+        }
+
+        function updateUI(donnees) {
+            document.getElementById("compteur-affichage").innerText = "Tentative : " + donnees.tentatives + " sur " + tentativesMax;
+        }
+
+        function afficherVictoire() {
+            document.getElementById("contenu-secret").style.display = "block";
+            document.getElementById("message-erreur").style.display = "none";
+            document.getElementById("message-bloque").style.display = "none";
+            document.getElementById("compteur-affichage").style.display = "none";
+            document.getElementById("codeSaisi").style.display = "none";
+            document.getElementById("boutonValider").style.display = "none";
+        }
+
+        function bloquerJeu() {
+            document.getElementById("message-erreur").style.display = "none";
+            document.getElementById("message-bloque").style.display = "block";
+            document.getElementById("codeSaisi").disabled = true;
+            document.getElementById("boutonValider").disabled = true;
+            document.getElementById("boutonValider").innerText = "BLOQUÉ";
+            document.getElementById("codeSaisi").value = "ACCÈS REFUSÉ";
+        }
+
+        // Touche entrée pour valider login et énigme
+        document.getElementById("codeEquipe").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") connexionEquipe();
         });
+        document.getElementById("codeSaisi").addEventListener("keypress", function(e) {
+            if (e.key === "Enter" && !document.getElementById("boutonValider").disabled) verifierReponse();
+        });
+
     </script>
 
 </body>
