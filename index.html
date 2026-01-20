@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Énigme B_together</title>
     <style>
-        /* --- DESIGN PERSONNALISÉ --- */
+        /* --- DESIGN GLOBAL --- */
         body {
-            background-color: #213973; /* Votre Bleu spécifique */
-            color: white; /* Texte en blanc pour le contraste */
+            background-color: #213973; /* Fond Bleu */
+            color: white; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
@@ -20,12 +20,12 @@
             text-align: center;
         }
 
-        /* Style du Logo */
+        /* Logo */
         .logo-img {
-            max-width: 80%; /* S'adapte aux mobiles */
-            width: 400px;   /* Taille max sur ordi */
+            max-width: 80%;
+            width: 400px;
             height: auto;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         /* Conteneur principal */
@@ -34,17 +34,18 @@
             width: 100%;
         }
 
-        h1 {
-            font-size: 24px;
-            font-weight: normal;
-            margin-bottom: 20px;
-            line-height: 1.5;
+        /* --- STYLES SPÉCIFIQUES --- */
+        
+        /* Style pour les textes en rouge demandé */
+        .rouge-marque {
+            color: #b31832;
+            font-weight: bold;
         }
 
         /* Champ de réponse */
         input {
             background: transparent;
-            border: 1px solid white; /* Le liseré blanc fin demandé */
+            border: 1px solid white; /* Liseré blanc fin */
             color: white;
             padding: 15px;
             font-size: 18px;
@@ -53,9 +54,8 @@
             margin-bottom: 20px;
             outline: none;
             border-radius: 5px;
+            margin-top: 20px;
         }
-        
-        /* Changer la couleur du texte indicatif (placeholder) en gris clair */
         ::placeholder { color: #ccc; opacity: 0.7; }
 
         /* Bouton */
@@ -72,27 +72,45 @@
         }
         button:hover { background: #e0e0e0; }
         
-        /* Zones cachées (Message d'erreur et Succès) */
+        /* Message d'erreur */
         #message-erreur { 
-            color: #ff9999; /* Rouge clair pour être lisible sur le bleu */
+            color: #ff9999; 
             display: none; 
             margin-top: 20px; 
             font-weight: bold; 
         }
         
+        /* Zone de succès (cachée au début) */
         #contenu-secret { 
             display: none; 
             border: 1px solid white; 
             padding: 30px; 
             margin-top: 30px; 
-            background-color: rgba(255, 255, 255, 0.1); /* Fond très légèrement blanc transparent */
+            background-color: rgba(255, 255, 255, 0.1); 
             border-radius: 8px;
+        }
+
+        /* Titre félicitation */
+        .titre-succes {
+            color: #b31832;
+            text-transform: uppercase;
+            margin-top: 0;
         }
 
         .indice-text {
             font-size: 20px;
             font-weight: bold;
             color: #fff;
+            line-height: 1.5;
+        }
+
+        .petit-texte {
+            font-size: 14px;
+            font-weight: normal;
+            font-style: italic;
+            opacity: 0.8;
+            display: block;
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -101,8 +119,11 @@
     <img src="B_together26-WEST-EU_logo_landscape_Blue-Background.png" alt="Logo B_together" class="logo-img">
 
     <div class="container">
+        
         <p style="font-size: 1.2em; line-height: 1.6;">
-            <strong>Énigme ></strong> Si ce n’est pas le lendemain de lundi ou le jour avant jeudi, que demain n’est pas dimanche, que ce n’était pas dimanche hier et que le jour après demain n’est pas samedi, et que le jour avant hier n’était pas mercredi, quel jour sommes-nous ?
+            <span class="rouge-marque" style="font-size: 1.4em;">ÉNIGME :</span>
+            <br><br>
+            Si ce n’est pas le lendemain de lundi ou le jour avant jeudi, que demain n’est pas dimanche, que ce n’était pas dimanche hier et que le jour après demain n’est pas samedi, et que le jour avant hier n’était pas mercredi, quel jour sommes-nous ?
         </p>
 
         <input type="text" id="codeSaisi" placeholder="Votre réponse ici...">
@@ -114,49 +135,26 @@
         </div>
 
         <div id="contenu-secret">
-            <h2>Félicitations !</h2>
+            <h2 class="titre-succes">FÉLICITATION</h2>
+            
             <p class="indice-text">
                 Voici votre indice :<br><br>
-                A l’entrée de l’ancien marché aux poissons, aujourd’hui temple de la culture rochelaise.
+                A l’entrée de l’ancien marché aux poissons, aujourd’hui temple de la culture rochelaise,
+                
+                <span class="petit-texte">
+                    Reportez cet indice sur votre roadbook, il vous sera utile.
+                </span>
             </p>
         </div>
     </div>
 
     <script>
         function verifierCode() {
-            // --- LA BONNE RÉPONSE ---
             var reponseCorrecte = "DIMANCHE"; 
-            // ------------------------
-
             var champSaisie = document.getElementById("codeSaisi");
             var saisieUtilisateur = champSaisie.value;
 
-            // .trim() enlève les espaces accidentels avant ou après
-            // .toUpperCase() transforme tout en majuscules pour comparer
+            // Vérification (insensible à la casse et aux espaces)
             if (saisieUtilisateur.trim().toUpperCase() === reponseCorrecte) {
-                
-                // Affiche le succès
                 document.getElementById("contenu-secret").style.display = "block";
-                document.getElementById("message-erreur").style.display = "none";
-                
-                // Cache le bouton et le champ pour faire propre
-                champSaisie.style.display = "none";
-                document.querySelector("button").style.display = "none";
-                
-            } else {
-                // Affiche l'erreur
-                document.getElementById("message-erreur").style.display = "block";
-                document.getElementById("contenu-secret").style.display = "none";
-            }
-        }
-        
-        // Permet de valider aussi en appuyant sur la touche "Entrée" du clavier
-        document.getElementById("codeSaisi").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                verifierCode();
-            }
-        });
-    </script>
-
-</body>
-</html>
+                document.getElementById("message-erreur
